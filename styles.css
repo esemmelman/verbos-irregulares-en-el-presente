@@ -13,17 +13,17 @@ select { padding: 10px; border: 2px solid #111; background: white; color: #111; 
 #audio-status:empty { display: none; }
 #audio-status { padding: 16px; border-left: 6px solid #164c80; }
 ol { list-style: none; margin: 32px 0 0; padding: 0; }
-li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 16px; border-bottom: 3px solid #bbb; padding: 24px 0; }
+li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 16px; border: 3px solid #123d66; border-radius: 10px; background: #f1f6fb; padding: 16px; margin-bottom: 24px; }
+li:has(.word[aria-pressed="true"]) { background: #fff3cf; }
 button { cursor: pointer; border: 3px solid #123d66; border-radius: 10px; min-height: 76px; }
-.word { font-size: var(--word-size); font-weight: 700; line-height: 1.25; text-align: left; padding: 16px; overflow-wrap: anywhere; color: #111; background: #f1f6fb; }
-.word[aria-pressed="true"] { background: #fff3cf; }
+.word { font-size: var(--word-size); font-weight: 700; line-height: 1.25; text-align: left; padding: 16px; overflow-wrap: anywhere; color: #111; background: transparent; border: 0; align-self: stretch; }
 .audio { font-size: 2rem; font-weight: 700; padding: 16px 24px; background: #123d66; color: white; }
 button:hover { border-color: #000; box-shadow: 0 0 0 2px #000; }
 :focus-visible { outline: 5px solid #a34800; outline-offset: 5px; }
 button:disabled { opacity: .6; cursor: not-allowed; }
 @media (max-width: 650px) {
   main { padding: 20px 12px; }
-  li { gap: 8px; grid-template-columns: minmax(0, 1fr) auto; }
+  li { gap: 8px; padding: 8px; grid-template-columns: minmax(0, 1fr) auto; }
   .word { grid-row: span 2; padding: 12px; }
   .audio { grid-column: 2; font-size: 1.5rem; padding: 12px; }
 }
