@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spanish vocabulary · Present tense</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1>Spanish vocabulary</h1>
+    <p>Click a word to see its English meaning. Click again for Spanish.</p>
+    <p>Use <strong>Normal</strong> or <strong>Slow</strong> to hear the Spanish word.</p>
+    <label class="size-control" for="text-size">Word size <select id="text-size"><option value="3">Large</option><option value="4" selected>Very large</option><option value="5">Extra large</option></select></label>
+    <p id="audio-status" role="status" aria-live="polite"></p>
+    <ol id="words" aria-label="Spanish words in image order"></ol>
+    <noscript>Please enable JavaScript to translate words and play audio.</noscript>
+  </main>
+</body>
+</html>
