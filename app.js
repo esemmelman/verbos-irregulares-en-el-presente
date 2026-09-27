@@ -35,14 +35,17 @@ if (supportsSpeech) {
 }
 
 let pendingSpeech;
+let speechSequence = 0;
 function cancelSpeech() {
+  speechSequence += 1;
   clearTimeout(pendingSpeech);
   pendingSpeech = undefined;
   if (supportsSpeech) window.speechSynthesis.cancel();
 }
 
-function speak(text, rate, language = 'es', delay = 0) {
+function speak(text, rate, language = 'es', delay = 0, onComplete) {
   cancelSpeech();
+  const sequence = speechSequence;
   if (!supportsSpeech) return;
   const utterance = new SpeechSynthesisUtterance(text);
   const preferred = language === 'en' ? 'en-US' : 'es-MX';
@@ -52,7 +55,11 @@ function speak(text, rate, language = 'es', delay = 0) {
   if (voice) utterance.voice = voice;
   utterance.rate = rate;
   utterance.onstart = () => { status.textContent = ''; };
-  utterance.onend = () => { status.textContent = ''; };
+  utterance.onend = () => {
+    if (sequence !== speechSequence) return;
+    status.textContent = '';
+    if (onComplete) onComplete();
+  };
   utterance.onerror = event => {
     if (!['interrupted', 'canceled'].includes(event.error)) status.textContent = `Could not play audio. Check that an ${language === 'en' ? 'English' : 'available Spanish'} voice is installed on your device and try again.`;
   };
@@ -75,13 +82,27 @@ for (const [spanish, english] of vocabulary) {
   word.lang = 'es';
   word.setAttribute('aria-pressed', 'false');
   word.setAttribute('aria-label', `${spanish}: show English translation`);
+  let resetTimer;
+  let displaySequence = 0;
+  function showSpanish() {
+    word.textContent = spanish;
+    word.lang = 'es';
+    word.setAttribute('aria-pressed', 'false');
+    word.setAttribute('aria-label', `${spanish}: show English translation`);
+  }
   word.addEventListener('click', () => {
+    clearTimeout(resetTimer);
+    const currentDisplay = ++displaySequence;
     const showEnglish = word.getAttribute('aria-pressed') === 'false';
     word.textContent = showEnglish ? english : spanish;
     word.lang = showEnglish ? 'en' : 'es';
     word.setAttribute('aria-pressed', String(showEnglish));
     word.setAttribute('aria-label', showEnglish ? `${english}: show Spanish word` : `${spanish}: show English translation`);
-    if (showEnglish) speak(english, 0.7, 'en', 250);
+    if (showEnglish) speak(english, 0.7, 'en', 250, () => {
+      resetTimer = setTimeout(() => {
+        if (currentDisplay === displaySequence) showSpanish();
+      }, 1000);
+    });
     else cancelSpeech();
   });
   row.append(word);
