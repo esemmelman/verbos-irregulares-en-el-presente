@@ -31,20 +31,23 @@ if (supportsSpeech) {
   updateVoices();
   window.speechSynthesis.addEventListener('voiceschanged', updateVoices);
 } else {
-  status.textContent = 'Spanish audio is unavailable in this browser. Try a browser with speech support.';
+  status.textContent = 'Audio is unavailable in this browser. Try a browser with speech support.';
 }
 
-function speak(spanish, rate) {
+function speak(text, rate, language = 'es') {
+  if (!supportsSpeech) return;
   window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(spanish);
-  const voice = voices.find(v => /^es[-_]MX$/i.test(v.lang)) || voices.find(v => /^es([-_]|$)/i.test(v.lang));
-  utterance.lang = voice ? voice.lang : 'es-ES';
+  const utterance = new SpeechSynthesisUtterance(text);
+  const preferred = language === 'en' ? 'en-US' : 'es-MX';
+  const voice = voices.find(v => v.lang.replace('_', '-').toLowerCase() === preferred.toLowerCase())
+    || voices.find(v => v.lang.toLowerCase().split(/[-_]/)[0] === language);
+  utterance.lang = voice ? voice.lang : preferred;
   if (voice) utterance.voice = voice;
   utterance.rate = rate;
-  utterance.onstart = () => { status.textContent = `Playing: ${spanish} (${rate === 1 ? 'normal' : 'slow'})`; };
+  utterance.onstart = () => { status.textContent = `Playing: ${text} (${rate === 1 ? 'normal' : 'slow'})`; };
   utterance.onend = () => { status.textContent = ''; };
   utterance.onerror = event => {
-    if (!['interrupted', 'canceled'].includes(event.error)) status.textContent = 'Could not play Spanish audio. Check that a Spanish voice is installed on your device and try again.';
+    if (!['interrupted', 'canceled'].includes(event.error)) status.textContent = `Could not play audio. Check that an ${language === 'en' ? 'English' : 'available Spanish'} voice is installed on your device and try again.`;
   };
   window.speechSynthesis.speak(utterance);
 }
@@ -64,9 +67,10 @@ for (const [spanish, english] of vocabulary) {
     word.lang = showEnglish ? 'en' : 'es';
     word.setAttribute('aria-pressed', String(showEnglish));
     word.setAttribute('aria-label', showEnglish ? `${english}: show Spanish word` : `${spanish}: show English translation`);
+    if (showEnglish) speak(english, 1, 'en');
   });
   row.append(word);
-  for (const [label, rate] of [['Normal', 1], ['Slow', 0.6]]) {
+  for (const [label, rate] of [['Slow', 0.6], ['Normal', 1]]) {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'audio';
