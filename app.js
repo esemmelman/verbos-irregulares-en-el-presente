@@ -73,6 +73,16 @@ function speak(text, rate, language = 'es', delay = 0, onComplete) {
   }
 }
 
+function speakTranslation(spanish, english, onComplete) {
+  if (spanish === 'al') {
+    speak('to', 0.7, 'en', 250, () => {
+      speak('the', 0.7, 'en', 350, onComplete);
+    });
+  } else {
+    speak(english, 0.7, 'en', 250, onComplete);
+  }
+}
+
 for (const [spanish, english] of vocabulary) {
   const row = document.createElement('li');
   const word = document.createElement('button');
@@ -98,7 +108,7 @@ for (const [spanish, english] of vocabulary) {
     word.lang = showEnglish ? 'en' : 'es';
     word.setAttribute('aria-pressed', String(showEnglish));
     word.setAttribute('aria-label', showEnglish ? `${english}: show Spanish word` : `${spanish}: show English translation`);
-    if (showEnglish) speak(english, 0.7, 'en', 250, () => {
+    if (showEnglish) speakTranslation(spanish, english, () => {
       resetTimer = setTimeout(() => {
         if (currentDisplay === displaySequence) showSpanish();
       }, 1000);
