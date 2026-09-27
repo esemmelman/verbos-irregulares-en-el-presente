@@ -76,13 +76,15 @@ function speak(text, rate, language = 'es', delay = 0, onComplete) {
 const ENGLISH_RATE = 0.55;
 
 function speakTranslation(spanish, english, onComplete) {
-  if (spanish === 'al') {
-    speak('to', ENGLISH_RATE, 'en', 250, () => {
-      speak('the', ENGLISH_RATE, 'en', 350, onComplete);
+  const parts = spanish === 'al' ? ['to', 'the']
+    : english.split(/\s*\/\s*/).flatMap((part, index) => index ? ['or', part] : [part]);
+  function speakPart(index) {
+    speak(parts[index], ENGLISH_RATE, 'en', index === 0 ? 250 : 350, () => {
+      if (index + 1 < parts.length) speakPart(index + 1);
+      else if (onComplete) onComplete();
     });
-  } else {
-    speak(english, ENGLISH_RATE, 'en', 250, onComplete);
   }
+  speakPart(0);
 }
 
 for (const [spanish, english] of vocabulary) {
