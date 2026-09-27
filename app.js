@@ -34,9 +34,16 @@ if (supportsSpeech) {
   status.textContent = 'Audio is unavailable in this browser. Try a browser with speech support.';
 }
 
-function speak(text, rate, language = 'es') {
+let pendingSpeech;
+function cancelSpeech() {
+  clearTimeout(pendingSpeech);
+  pendingSpeech = undefined;
+  if (supportsSpeech) window.speechSynthesis.cancel();
+}
+
+function speak(text, rate, language = 'es', delay = 0) {
+  cancelSpeech();
   if (!supportsSpeech) return;
-  window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   const preferred = language === 'en' ? 'en-US' : 'es-MX';
   const voice = voices.find(v => v.lang.replace('_', '-').toLowerCase() === preferred.toLowerCase())
@@ -49,7 +56,14 @@ function speak(text, rate, language = 'es') {
   utterance.onerror = event => {
     if (!['interrupted', 'canceled'].includes(event.error)) status.textContent = `Could not play audio. Check that an ${language === 'en' ? 'English' : 'available Spanish'} voice is installed on your device and try again.`;
   };
-  window.speechSynthesis.speak(utterance);
+  if (delay > 0) {
+    pendingSpeech = setTimeout(() => {
+      pendingSpeech = undefined;
+      window.speechSynthesis.speak(utterance);
+    }, delay);
+  } else {
+    window.speechSynthesis.speak(utterance);
+  }
 }
 
 for (const [spanish, english] of vocabulary) {
@@ -67,7 +81,8 @@ for (const [spanish, english] of vocabulary) {
     word.lang = showEnglish ? 'en' : 'es';
     word.setAttribute('aria-pressed', String(showEnglish));
     word.setAttribute('aria-label', showEnglish ? `${english}: show Spanish word` : `${spanish}: show English translation`);
-    if (showEnglish) speak(english, 1, 'en');
+    if (showEnglish) speak(english, 0.85, 'en', 500);
+    else cancelSpeech();
   });
   row.append(word);
   for (const [label, rate] of [['Slow', 0.6], ['Normal', 1]]) {
