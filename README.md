@@ -6,4 +6,4 @@ Words follow the five supplied images in reading order. Repeated words are remov
 
 Click a word to switch between Spanish and English. Revealing English also speaks the English translation. Slow and Normal (in that order) always speak the original Spanish using the browser's speech synthesis and available Spanish voices. Audio availability depends on the browser and installed voices.
 
-The default word size is 64px, with 48px and 80px options. The page includes high contrast, visible keyboard focus, native buttons, and responsive audio controls to the right of each word.
+The default word size is Extra large (80px), with 48px and 64px options. The page includes high contrast, visible keyboard focus, native buttons, and responsive audio controls to the right of each word.
