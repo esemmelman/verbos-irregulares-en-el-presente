@@ -1,25 +1,25 @@
 // First occurrences in the supplied dialogues, excluding input boxes and answer/feedback sections.
 const vocabulary = [
-  ['Adónde', 'Where to'], ['vas', 'you go'], ['los', 'the'], ['fines', 'ends'],
+  ['Adónde', 'Where to'], ['vas', 'you go'], ['los', 'the (masculine plural)'], ['fines', 'ends (weekends in this sentence)'],
   ['de', 'of / from'], ['semana', 'week'], ['al', 'to the'], ['centro', 'center'],
-  ['comercial', 'commercial / shopping'], ['con', 'with'], ['mis', 'my'], ['amigos', 'friends'],
-  ['Cómo', 'How'], ['eres', 'you are'], ['bastante', 'quite'], ['atrevido', 'daring'],
-  ['Me', 'me / to me'], ['gusta', 'is pleasing (to someone)'], ['montar', 'to ride'], ['en', 'in / on'], ['monopatín', 'skateboard'],
-  ['Qué', 'What'], ['le', 'to him / her'], ['dices', 'you say'], ['a', 'to / at'], ['tu', 'your'],
-  ['abuelita', 'grandma'], ['cuando', 'when'], ['te', 'you / to you'], ['da', 'gives'], ['un', 'a / an'],
+  ['comercial', 'commercial / shopping'], ['con', 'with'], ['mis', 'my (before plural nouns)'], ['amigos', 'friends'],
+  ['Cómo', 'How'], ['eres', 'you are (a trait or characteristic)'], ['bastante', 'quite'], ['atrevido', 'daring'],
+  ['Me', 'me / to me'], ['gusta', 'is pleasing (with me: I like)'], ['montar', 'to ride'], ['en', 'in / on'], ['monopatín', 'skateboard'],
+  ['Qué', 'What'], ['le', 'to him / her'], ['dices', 'you say'], ['a', 'to / at'], ['tu', 'your (before a singular noun)'],
+  ['abuelita', 'grandma'], ['cuando', 'when'], ['te', 'you / to you'], ['da', 'gives'], ['un', 'a / an (masculine singular)'],
   ['regalo', 'gift'], ['muchísimas', 'very many'], ['gracias', 'thanks'],
-  ['Dónde', 'Where'], ['estás', 'you are'], ['ahora', 'now'], ['mismo', 'same / right (now)'],
-  ['haciendo', 'doing'], ['esta', 'this'], ['tarea', 'homework'], ['divertida', 'fun'], ['casa', 'home / house'],
-  ['Cuántas', 'How many'], ['clases', 'classes'], ['tienes', 'you have'], ['este', 'this'], ['año', 'year'],
-  ['cinco', 'five'], ['pero', 'but'], ['gustaría', 'would be pleasing (to someone)'], ['tomar', 'to take'],
-  ['una', 'a / an'], ['clase', 'class'], ['cerámica', 'ceramics'], ['también', 'also / too'],
+  ['Dónde', 'Where'], ['estás', 'you are (location or condition)'], ['ahora', 'now'], ['mismo', 'same / right (now)'],
+  ['haciendo', 'doing'], ['esta', 'this (feminine singular)'], ['tarea', 'homework'], ['divertida', 'fun'], ['casa', 'home / house'],
+  ['Cuántas', 'How many'], ['clases', 'classes'], ['tienes', 'you have'], ['este', 'this (masculine singular)'], ['año', 'year'],
+  ['cinco', 'five'], ['pero', 'but'], ['gustaría', 'would be pleasing (with me: I would like)'], ['tomar', 'to take'],
+  ['una', 'a / an (feminine singular)'], ['clase', 'class'], ['cerámica', 'ceramics'], ['también', 'also / too'],
   ['Generalmente', 'Generally'], ['hora', 'time / hour'], ['vienes', 'you come'], ['Pues', 'Well'],
-  ['muchos', 'many'], ['días', 'days'], ['las', 'the / them'], ['ocho', 'eight'], ['menos', 'minus / less'], ['cuarto', 'quarter'],
-  ['Conoces', 'you know'], ['muchas', 'many'], ['personas', 'people'], ['Sí', 'Yes'], ['todas', 'all'],
-  ['Siempre', 'Always'], ['obedeces', 'you obey'], ['tus', 'your'], ['padres', 'parents'], ['No', 'No / not'],
-  ['veces', 'times'], ['reglas', 'rules'], ['la', 'the / it'],
-  ['Haces', 'you do / make'], ['todos', 'all / every'], ['traes', 'you bring'],
-  ['el', 'the'], ['libro', 'book'], ['texto', 'text'], ['cuaderno', 'notebook'], ['y', 'and'], ['unos', 'some'], ['lápices', 'pencils']
+  ['muchos', 'many (masculine plural)'], ['días', 'days'], ['las', 'the / them (feminine plural)'], ['ocho', 'eight'], ['menos', 'minus / less'], ['cuarto', 'quarter (15 minutes when telling time)'],
+  ['Conoces', 'you know (are familiar with a person or place)'], ['muchas', 'many (feminine plural)'], ['personas', 'people'], ['Sí', 'Yes'], ['todas', 'all (feminine plural)'],
+  ['Siempre', 'Always'], ['obedeces', 'you obey'], ['tus', 'your (before plural nouns)'], ['padres', 'parents'], ['No', 'No / not'],
+  ['veces', 'times (occasions)'], ['reglas', 'rules'], ['la', 'the / it (feminine singular)'],
+  ['Haces', 'you do / make'], ['todos', 'all (masculine plural; every in every day)'], ['traes', 'you bring'],
+  ['el', 'the (masculine singular)'], ['libro', 'book'], ['texto', 'text'], ['cuaderno', 'notebook'], ['y', 'and'], ['unos', 'some (masculine plural)'], ['lápices', 'pencils']
 ];
 
 const list = document.querySelector('#words');
@@ -73,13 +73,15 @@ function speak(text, rate, language = 'es', delay = 0, onComplete) {
   }
 }
 
+const ENGLISH_RATE = 0.55;
+
 function speakTranslation(spanish, english, onComplete) {
   if (spanish === 'al') {
-    speak('to', 0.7, 'en', 250, () => {
-      speak('the', 0.7, 'en', 350, onComplete);
+    speak('to', ENGLISH_RATE, 'en', 250, () => {
+      speak('the', ENGLISH_RATE, 'en', 350, onComplete);
     });
   } else {
-    speak(english, 0.7, 'en', 250, onComplete);
+    speak(english, ENGLISH_RATE, 'en', 250, onComplete);
   }
 }
 
