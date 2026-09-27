@@ -81,7 +81,7 @@ for (const [spanish, english] of vocabulary) {
     word.lang = showEnglish ? 'en' : 'es';
     word.setAttribute('aria-pressed', String(showEnglish));
     word.setAttribute('aria-label', showEnglish ? `${english}: show Spanish word` : `${spanish}: show English translation`);
-    if (showEnglish) speak(english, 0.85, 'en', 500);
+    if (showEnglish) speak(english, 0.7, 'en', 250);
     else cancelSpeech();
   });
   row.append(word);
