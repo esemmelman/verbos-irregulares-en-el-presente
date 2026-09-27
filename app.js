@@ -44,7 +44,7 @@ function speak(text, rate, language = 'es') {
   utterance.lang = voice ? voice.lang : preferred;
   if (voice) utterance.voice = voice;
   utterance.rate = rate;
-  utterance.onstart = () => { status.textContent = `Playing: ${text} (${rate === 1 ? 'normal' : 'slow'})`; };
+  utterance.onstart = () => { status.textContent = ''; };
   utterance.onend = () => { status.textContent = ''; };
   utterance.onerror = event => {
     if (!['interrupted', 'canceled'].includes(event.error)) status.textContent = `Could not play audio. Check that an ${language === 'en' ? 'English' : 'available Spanish'} voice is installed on your device and try again.`;
